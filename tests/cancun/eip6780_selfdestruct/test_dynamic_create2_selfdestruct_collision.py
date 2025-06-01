@@ -40,7 +40,6 @@ REFERENCE_SPEC_VERSION = "1b6a0e94cc47e859b9866e570391cf37dc55059a"
         (False, True),
     ],
 )
-@pytest.mark.skip(reason="Not implemented yet")
 def test_dynamic_create2_selfdestruct_collision(
     fork: Fork,
     create2_dest_already_in_state: bool,
@@ -76,7 +75,7 @@ def test_dynamic_create2_selfdestruct_collision(
     assert call_create2_contract_in_between or call_create2_contract_at_the_end, "invalid test"
 
     # Slightly modified test: True value is not supported by the test framework in execute mode.
-    create2_dest_already_in_state = True
+    create2_dest_already_in_state = False
 
     # Storage locations
     create2_constructor_worked = 1
