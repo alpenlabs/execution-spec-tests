@@ -1,0 +1,2 @@
+uv run execute remote -m state_test --fork=Prague --rpc-endpoint=https://rpc.development.stratabtc.org --rpc-seed-key 0xad79c65187566778b3e54b2e32ae5d6f4e4bc295d0573f7886a2820eb7625482 --rpc-chain-id 2892 --tx-wait-timeout 120 -v
+cast send --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80 --value 10ether 0x56D663bf94f11547AC5F90b84378983cac4876E5 --rpc-url https://rpc.development.stratabtc.org

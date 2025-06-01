@@ -130,6 +130,7 @@ def caller_address(pre: Alloc, caller_code: Bytecode) -> Address:
 def caller_tx(sender: EOA, caller_address: Address) -> Transaction:
     """Transaction that performs the call to the caller contract."""
     return Transaction(
+        chain_id=0xB4C,
         to=caller_address,
         value=1,
         gas_limit=500_000,
