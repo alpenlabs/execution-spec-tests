@@ -134,7 +134,7 @@ def caller_tx(sender: EOA, caller_address: Address) -> Transaction:
         to=caller_address,
         value=1,
         gas_limit=500_000,
-        gas_price=700,
+        gas_price=70,
         sender=sender,
     )
 
