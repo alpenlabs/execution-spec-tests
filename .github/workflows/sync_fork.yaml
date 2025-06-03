@@ -2,7 +2,7 @@ name: Sync Fork
 
 on:
   schedule:
-    - cron: '0 3 * * *'  # Runs daily at 03:00 UTC
+    - cron: '0 3 * * 0'  # Runs weekly on Sunday at 03:00 UTC
   workflow_dispatch:      # Manual trigger option
 
 jobs:
@@ -39,5 +39,5 @@ jobs:
           commit-message: "Sync with upstream main"
           title: "Sync Fork with Upstream"
           body: "This PR updates the fork with the latest changes from upstream."
-          branch: sync-upstream-{{ date }}
+          branch: sync-upstream-${{ github.run_id }}
           base: main
