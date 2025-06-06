@@ -30,7 +30,6 @@ allowing us to verify whether the provided gas was sufficient or
 insufficient.
 """
 
-import random
 from typing import Dict
 
 import pytest
