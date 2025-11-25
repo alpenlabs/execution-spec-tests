@@ -1,8 +1,11 @@
 skip_tests:
   ## Frontier
-  # Skip test_precompiles[fork_Prague-address_0xa-precompile_exists_True-state_test]
-  # since this test expects point evaluation precompile that we do not support
+  # Skip point evaluation precompile test (address 0x0a)
+  # Client does not implement EIP-4844 point evaluation precompile at 0x0a
+  # This is a Prague-fork precompile that checks if calling the precompile costs more gas than calling an empty account
+  # Expected behavior: storage slot 0 = 0x00 (precompile exists), Actual: 0x01 (precompile doesn't exist)
   - tests/frontier/precompiles/test_precompiles.py::test_precompiles[fork_Prague-address_0xa-precompile_exists_True-state_test]
+  - tests/frontier/precompiles/test_precompiles.py::test_precompiles[fork_Prague-address_0x000000000000000000000000000000000000000a-precompile_exists_True-state_test]
   ## Cancun test skip
   # Blanket skip all the Blob related tests
   - tests/cancun/eip4844_blobs/*.py::*
@@ -30,6 +33,11 @@ skip_tests:
   - tests/cancun/eip5656_mcopy/test_mcopy_memory_expansion.py::test_mcopy_huge_memory_expansion[fork_Prague-evm_code_type_LEGACY-state_test-from_existent_memory-successful_False--max_src_minus_one_single_byte_expansion]
   - tests/cancun/eip5656_mcopy/test_mcopy_memory_expansion.py::test_mcopy_huge_memory_expansion[fork_Prague-evm_code_type_LEGACY-state_test-from_existent_memory-successful_False--half_max_src_single_byte_expansion]
   - tests/cancun/eip5656_mcopy/test_mcopy_memory_expansion.py::test_mcopy_huge_memory_expansion[fork_Prague-evm_code_type_LEGACY-state_test-from_existent_memory-successful_False--max_length_expansion]
+  ## Osaka test skip
+  # eip7825_transaction_gas_limit_cap - skip tests that require Type-3 (blob) transactions
+  # Execute mode does not support Type-3 transactions, use fill/consume workflow instead
+  - tests/osaka/eip7825_transaction_gas_limit_cap/test_tx_gas_limit.py::test_transaction_gas_limit_cap[fork_Prague-tx_gas_limit_cap_none1-state_test]
+
   ## Pectra test skip
   # eip7623_increase_calldata_cost - skip that require Type-3 transaction
   - tests/prague/eip7623_increase_calldata_cost/test_execution_gas.py::TestGasConsumption::test_full_gas_consumption[fork_Prague-state_test-extra_gas-type_3]
@@ -63,18 +71,31 @@ skip_tests:
   - tests/prague/eip7702_set_code_tx/test_set_code_txs.py::test_nonce_validity[fork_Prague-state_test-nonce=0,account_nonce=1]
   - tests/prague/eip7702_set_code_tx/test_set_code_txs.py::test_empty_authorization_list[fork_Prague-state_test]
   # eip2537_bls_12_381_precompiles
-  # Skip specific test that fail due to block gas limit
+  # Skip tests that fail due to block gas limit exceeded (client's block gas limit < 120M gas required by these tests)
+  # If client configuration allows, increase block gas limit to 120M+ to enable these tests
   - tests/prague/eip2537_bls_12_381_precompiles/test_bls12_pairing.py::test_valid_multi_inf[fork_Prague-state_test---]
   - tests/prague/eip2537_bls_12_381_precompiles/test_bls12_pairing.py::test_invalid_multi_inf[fork_Prague-state_test---]
+  # G1MSM tests requiring ~59M gas per transaction
   - tests/prague/eip2537_bls_12_381_precompiles/test_bls12_variable_length_input_contracts.py::test_valid_gas_g1msm[fork_Prague-state_test-precompile_address_12--exact_gas_full_discount_table]
   - tests/prague/eip2537_bls_12_381_precompiles/test_bls12_variable_length_input_contracts.py::test_valid_gas_g1msm[fork_Prague-state_test-precompile_address_12--one_extra_gas_full_discount_table]
   - tests/prague/eip2537_bls_12_381_precompiles/test_bls12_variable_length_input_contracts.py::test_invalid_gas_g1msm[fork_Prague-state_test-precompile_address_12--insufficient_gas_full_discount_table]
+  - tests/prague/eip2537_bls_12_381_precompiles/test_bls12_variable_length_input_contracts.py::test_invalid_length_g1msm[fork_Prague-state_test-precompile_address_12--input_one_byte_too_long_full_discount_table]
+  - tests/prague/eip2537_bls_12_381_precompiles/test_bls12_variable_length_input_contracts.py::test_invalid_length_g1msm[fork_Prague-state_test-precompile_address_12--input_one_byte_too_short_full_discount_table]
+  # Additional G1MSM test variants with different parameter names (fork_Prague-full_discount_table-state_test pattern)
+  - tests/prague/eip2537_bls_12_381_precompiles/test_bls12_variable_length_input_contracts.py::test_valid_gas_g1msm[fork_Prague-full_discount_table-state_test-precompile_address_12--exact_gas]
+  - tests/prague/eip2537_bls_12_381_precompiles/test_bls12_variable_length_input_contracts.py::test_invalid_gas_g1msm[fork_Prague-full_discount_table-state_test-precompile_address_12--insufficient_gas]
+  - tests/prague/eip2537_bls_12_381_precompiles/test_bls12_variable_length_input_contracts.py::test_invalid_length_g1msm[fork_Prague-full_discount_table-state_test-precompile_address_12--input_one_byte_too_short]
+  - tests/prague/eip2537_bls_12_381_precompiles/test_bls12_variable_length_input_contracts.py::test_invalid_length_g1msm[fork_Prague-full_discount_table-state_test-precompile_address_12--input_one_byte_too_long]
+  # G2MSM tests requiring ~110M gas per transaction
   - tests/prague/eip2537_bls_12_381_precompiles/test_bls12_variable_length_input_contracts.py::test_valid_gas_g2msm[fork_Prague-state_test-precompile_address_14--exact_gas_full_discount_table]
   - tests/prague/eip2537_bls_12_381_precompiles/test_bls12_variable_length_input_contracts.py::test_valid_gas_g2msm[fork_Prague-state_test-precompile_address_14--one_extra_gas_full_discount_table]
   - tests/prague/eip2537_bls_12_381_precompiles/test_bls12_variable_length_input_contracts.py::test_invalid_gas_g2msm[fork_Prague-state_test-precompile_address_14--insufficient_gas_full_discount_table]
-  - tests/prague/eip2537_bls_12_381_precompiles/test_bls12_variable_length_input_contracts.py::test_invalid_length_g1msm[fork_Prague-state_test-precompile_address_12--input_one_byte_too_long_full_discount_table]
-  - tests/prague/eip2537_bls_12_381_precompiles/test_bls12_variable_length_input_contracts.py::test_invalid_length_g1msm[fork_Prague-state_test-precompile_address_12--input_one_byte_too_short_full_discount_table]
   - tests/prague/eip2537_bls_12_381_precompiles/test_bls12_variable_length_input_contracts.py::test_invalid_length_g2msm[fork_Prague-state_test-precompile_address_14--input_one_byte_too_short_full_discount_table]
   - tests/prague/eip2537_bls_12_381_precompiles/test_bls12_variable_length_input_contracts.py::test_invalid_length_g2msm[fork_Prague-state_test-precompile_address_14--input_one_byte_too_long_full_discount_table]
+  # Additional G2MSM test variants with different parameter names (fork_Prague-full_discount_table-state_test pattern)
+  - tests/prague/eip2537_bls_12_381_precompiles/test_bls12_variable_length_input_contracts.py::test_valid_gas_g2msm[fork_Prague-full_discount_table-state_test-precompile_address_14--exact_gas]
+  - tests/prague/eip2537_bls_12_381_precompiles/test_bls12_variable_length_input_contracts.py::test_invalid_gas_g2msm[fork_Prague-full_discount_table-state_test-precompile_address_14--insufficient_gas]
+  - tests/prague/eip2537_bls_12_381_precompiles/test_bls12_variable_length_input_contracts.py::test_invalid_length_g2msm[fork_Prague-full_discount_table-state_test-precompile_address_14--input_one_byte_too_short]
+  - tests/prague/eip2537_bls_12_381_precompiles/test_bls12_variable_length_input_contracts.py::test_invalid_length_g2msm[fork_Prague-full_discount_table-state_test-precompile_address_14--input_one_byte_too_long]
   # Skip the spectest zkvm tests
   - tests/zkevm/*.py::*
