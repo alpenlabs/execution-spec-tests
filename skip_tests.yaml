@@ -6,6 +6,8 @@ skip_tests:
   # Expected behavior: storage slot 0 = 0x00 (precompile exists), Actual: 0x01 (precompile doesn't exist)
   - tests/frontier/precompiles/test_precompiles.py::test_precompiles[fork_Prague-address_0xa-precompile_exists_True-state_test]
   - tests/frontier/precompiles/test_precompiles.py::test_precompiles[fork_Prague-address_0x000000000000000000000000000000000000000a-precompile_exists_True-state_test]
+  # Alpen/reth treats memory expansion differently on early revert in this edge case
+  - tests/frontier/opcodes/test_call.py::test_call_memory_expands_on_early_revert[fork_Prague-state_test]
   ## Cancun test skip
   # Blanket skip all the Blob related tests
   - tests/cancun/eip4844_blobs/*.py::*
