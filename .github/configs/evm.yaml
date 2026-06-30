@@ -9,10 +9,10 @@ develop:
 static:
   impl: evmone
   repo: ethereum/evmone
-  ref: master
+  ref: v0.21.0
   targets: ["evmone-t8n"]
 benchmark:
   impl: evmone
   repo: ethereum/evmone
-  ref: master
+  ref: v0.21.0
   targets: ["evmone-t8n"]
