@@ -74,7 +74,8 @@ def test_dynamic_create2_selfdestruct_collision(
     """
     assert call_create2_contract_in_between or call_create2_contract_at_the_end, "invalid test"
 
-    # Slightly modified test: True value is not supported by the test framework in execute mode.
+    # Slightly modified test: True value is not supported by the test framework
+    # in execute mode.
     create2_dest_already_in_state = False
 
     # Storage locations
